@@ -1,0 +1,20 @@
+FROM node:carbon-alpine
+
+RUN apk --virtual dependencies add --update git python make g++ gcc && \
+  rm -rf /tmp/* /var/cache/apk/*
+
+WORKDIR /usr/app
+
+RUN git clone https://github.com/provable-things/ethereum-bridge .
+
+
+RUN yarn install --frozen-lockfile --prod --non-interactive
+
+RUN apk del dependencies && yarn cache clean
+
+RUN apk update && apk add bash
+
+COPY ./wait-for-it.sh /usr/app/wait-for-it.sh
+RUN chmod +x /usr/app/wait-for-it.sh
+
+ENTRYPOINT ["/bin/sh","-c","/usr/app/wait-for-it.sh ganache:8545 -t 30 -- node bridge -H ganache:8545 -a 9 --dev"]

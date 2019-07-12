@@ -1,0 +1,28 @@
+version: '3'
+services:
+  ganache:
+    image: trufflesuite/ganache-cli:v6.1.0
+    command: ganache-cli -h 0.0.0.0
+    ports:
+      - "8545:8545"
+  bridge:
+    build:
+      context: .
+      dockerfile: dockerfile.bridge
+    image: bridge:starter
+    restart: on-failure
+    depends_on:
+    - ganache
+  truffle:
+    build: 
+      context: .
+      dockerfile: dockerfile.truffle
+    image: provable:starter
+    environment:
+    - DEVELOPMENT_HOST=ganache
+    restart: on-failure
+    depends_on:
+    - ganache
+    - bridge
+    volumes:
+    - .:/app
