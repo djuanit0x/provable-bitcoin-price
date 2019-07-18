@@ -1,5 +1,4 @@
 const BitcoinPrice = artifacts.require("BitcoinPrice");
-const sleep = require("./helpers/sleep");
 
 const getEventLogByTopic = async eventTopic => {
     try {
@@ -38,7 +37,10 @@ contract("BitcoinPrice", accounts => {
 
         const newProvableResultEventLog = await getEventLogByTopic(newProvableResultEventTopic);
         const bitcoinPriceFromCoinGecko = web3.utils.hexToUtf8(newProvableResultEventLog.data);
-
-        console.log(`Bitcoin Price: $${bitcoinPriceFromCoinGecko}`);
+        console.log('##############################################################################');
+        console.log('###                                                                   ');
+        console.log(`###          Bitcoin Price: $${bitcoinPriceFromCoinGecko}             `);
+        console.log('###                                                                   ');
+        console.log('##############################################################################');
     });
 });
