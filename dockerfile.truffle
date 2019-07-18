@@ -14,4 +14,3 @@ RUN apk update && \
 COPY . /app/
 
 CMD truffle test ./test/BitcoinPrice.test.js --network development
-
